@@ -328,7 +328,7 @@ main {
 }
 
 .fadeClass {
-  animation: fadeIn 5s;
+  animation: fadeIn 6s;
 }
 
 @keyframes fadeIn {
