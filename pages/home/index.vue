@@ -1,48 +1,19 @@
 <template>
   <main
-    class="
-      w-screen
-      h-auto
-      min-h-screen
-      flex flex-column
-      align-items-center
-      justify-content-start
-    "
+    class="w-screen h-auto min-h-screen flex flex-column align-items-center justify-content-start"
   >
     <section
-      class="
-        banner
-        w-screen
-        flex flex-row
-        align-items-center
-        justify-content-center
-      "
+      class="banner w-screen flex flex-row align-items-center justify-content-center"
     >
       <div
-        class="
-          banner-info
-          flex flex-row
-          align-items-center
-          justify-content-center
-        "
+        class="banner-info flex flex-row align-items-center justify-content-center"
       >
         <div
-          class="
-            info-content
-            flex flex-column
-            align-items-start
-            justify-content-center
-          "
+          class="info-content flex flex-column align-items-start justify-content-center"
         >
           <img class="fadeClass" :src="banner.logo" alt="Movie Logo" />
           <div
-            class="
-              fadeClass
-              rating
-              flex flex-row
-              align-items-center
-              justify-content-start
-            "
+            class="fadeClass rating flex flex-row align-items-center justify-content-start"
           >
             <i class="m-1 w-auto pi pi-star-fill"></i>
             <i class="m-1 w-auto pi pi-star-fill"></i>
@@ -70,63 +41,59 @@
     </section>
 
     <section
-      class="
-        movies
-        w-screen
-        h-auto
-        flex flex-column
-        align-items-start
-        justify-content-center
-      "
+      class="movies w-screen h-auto flex flex-column align-items-start justify-content-center"
     >
-     
-      <!-- LISTAGEM CATEGORIA AÇÃO -->
-      <h3 class="ml-3">Ação</h3>
-      <div class="movies-category">
-        <section
-          v-for="index in noSection"
-          :key="index"
-          :id="'section' + index"
-        >
-          <a :href="'#section' + (index - 1 <= 0 ? noSection : index - 1)">
-            <div class="arrowContainer">&#8592;</div>
-          </a>
-          <div
-            v-for="subIndex in noItems"
-            :key="subIndex"
-            class="item"
-            @click="
-              () => {
-                banner.image =
-                  $store.state.BASE_URL +
-                  movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
-                    .banner;
+      <div class="categories"
+       v-for="(movie, id) in movies" :key="id">
+        <!-- LISTAGEM CATEGORIA AÇÃO -->
+        <h3 v-if="movie.movies.length >= 8" class="ml-3">{{movie.category.nome}}</h3>
+        <div v-if="movie.movies.length >= 8" class="movies-category">
+          <section
+            v-for="index in noSection"
+            :key="index"
+            :id="'section' + index"
+          >
+            <a :href="'#section' + (index - 1 <= 0 ? noSection : index - 1)">
+              <div class="arrowContainer">&#8592;</div>
+            </a>
+            <div
+              v-for="subIndex in noItems"
+              :key="subIndex"
+              class="item"
+              @click="
+                () => {
+                  banner.image =
+                    $store.state.BASE_URL +
+                    movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
+                      .banner;
 
-                banner.logo =
-                  $store.state.BASE_URL +
-                  movies[2].movies[(index - 1) * noItems + (subIndex - 1)].logo;
+                  banner.logo =
+                    $store.state.BASE_URL +
+                    movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
+                      .logo;
 
-                banner.description =
-                  movies[2].movies[
-                    (index - 1) * noItems + (subIndex - 1)
-                  ].descricao;
-              }
-            "
-          > 
-            <!-- <button class="fav">Favorito</button> -->
-            <img
-              v-if="movies[2] !== undefined"
-              :src="
-                $store.state.BASE_URL +
-                movies[2].movies[(index - 1) * noItems + (subIndex - 1)].foto
+                  banner.description =
+                    movies[2].movies[
+                      (index - 1) * noItems + (subIndex - 1)
+                    ].descricao;
+                }
               "
-            />
-          </div>
+            >
+              <!-- <button class="fav">Favorito</button> -->
+              <img
+                v-if="movies[2] !== undefined"
+                :src="
+                  $store.state.BASE_URL +
+                  movies[2].movies[(index - 1) * noItems + (subIndex - 1)].foto
+                "
+              />
+            </div>
 
-          <a :href="'#section' + (index + 1 > noSection ? 1 : index + 1)">
-            <div class="arrowContainer">&#8594;</div>
-          </a>
-        </section>
+            <a :href="'#section' + (index + 1 > noSection ? 1 : index + 1)">
+              <div class="arrowContainer">&#8594;</div>
+            </a>
+          </section>
+        </div>
       </div>
     </section>
   </main>
@@ -340,7 +307,7 @@ main {
   }
 }
 
-.fav{
+.fav {
   /* position: absolute; */
   bottom: 20px;
   /* bottom: 0;
