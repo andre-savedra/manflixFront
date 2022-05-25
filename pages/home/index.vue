@@ -49,11 +49,11 @@
         <h3 v-if="movie.movies.length >= 8" class="ml-3">{{movie.category.nome}}</h3>
         <div v-if="movie.movies.length >= 8" class="movies-category">
           <section
-            v-for="index in noSection"
+            v-for="index in calcSectionItens()"
             :key="index"
-            :id="'section' + index"
+            :id="'section' + id + '-' + index"
           >
-            <a :href="'#section' + (index - 1 <= 0 ? noSection : index - 1)">
+            <a :href="'#section' + id + '-' + (index - 1 <= 0 ? noSection : index - 1)">
               <div class="arrowContainer">&#8592;</div>
             </a>
             <div
@@ -64,16 +64,16 @@
                 () => {
                   banner.image =
                     $store.state.BASE_URL +
-                    movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
+                    movies[id].movies[(index - 1) * noItems + (subIndex - 1)]
                       .banner;
 
                   banner.logo =
                     $store.state.BASE_URL +
-                    movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
+                    movies[id].movies[(index - 1) * noItems + (subIndex - 1)]
                       .logo;
 
                   banner.description =
-                    movies[2].movies[
+                    movies[id].movies[
                       (index - 1) * noItems + (subIndex - 1)
                     ].descricao;
                 }
@@ -84,12 +84,12 @@
                 v-if="movies[2] !== undefined"
                 :src="
                   $store.state.BASE_URL +
-                  movies[2].movies[(index - 1) * noItems + (subIndex - 1)].foto
+                  movies[id].movies[(index - 1) * noItems + (subIndex - 1)].foto
                 "
               />
             </div>
 
-            <a :href="'#section' + (index + 1 > noSection ? 1 : index + 1)">
+            <a :href="'#section' + id + '-'  + (index + 1 > noSection ? 1 : index + 1)">
               <div class="arrowContainer">&#8594;</div>
             </a>
           </section>
@@ -116,9 +116,18 @@ export default {
       categories: [],
       noSection: 2,
       noItems: 4,
+      sectionsNo: [],
+      itemsNo: [],
     };
   },
   methods: {
+    calcSectionItens: function(){
+      const calcSec = 2;
+      const calcItem = 4;
+      this.sectionsNo.push(calcSec)
+      this.itemsNo.push(calcItem)
+      return calcSec;
+    },
     getCategories: async function () {
       await this.$axios
         .get(this.$store.state.BASE_URL + "/categoria")
