@@ -51,9 +51,9 @@
           <section
             v-for="index in noSection"
             :key="index"
-            :id="'section' + index"
+            :id="'section' + id + '-' + index"
           >
-            <a :href="'#section' + (index - 1 <= 0 ? noSection : index - 1)">
+            <a :href="'#section' + id + '-' + (index - 1 <= 0 ? noSection : index - 1)">
               <div class="arrowContainer">&#8592;</div>
             </a>
             <div
@@ -64,16 +64,16 @@
                 () => {
                   banner.image =
                     $store.state.BASE_URL +
-                    movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
+                    movies[id].movies[(index - 1) * noItems + (subIndex - 1)]
                       .banner;
 
                   banner.logo =
                     $store.state.BASE_URL +
-                    movies[2].movies[(index - 1) * noItems + (subIndex - 1)]
+                    movies[id].movies[(index - 1) * noItems + (subIndex - 1)]
                       .logo;
 
                   banner.description =
-                    movies[2].movies[
+                    movies[id].movies[
                       (index - 1) * noItems + (subIndex - 1)
                     ].descricao;
                 }
@@ -81,15 +81,15 @@
             >
               <!-- <button class="fav">Favorito</button> -->
               <img
-                v-if="movies[2] !== undefined"
+                v-if="movies[id] !== undefined"
                 :src="
                   $store.state.BASE_URL +
-                  movies[2].movies[(index - 1) * noItems + (subIndex - 1)].foto
+                  movies[id].movies[(index - 1) * noItems + (subIndex - 1)].foto
                 "
               />
             </div>
 
-            <a :href="'#section' + (index + 1 > noSection ? 1 : index + 1)">
+            <a :href="'#section' + id + '-' + (index + 1 > noSection ? 1 : index + 1)">
               <div class="arrowContainer">&#8594;</div>
             </a>
           </section>
@@ -116,9 +116,22 @@ export default {
       categories: [],
       noSection: 2,
       noItems: 4,
+      favorites: []
     };
   },
   methods: {
+    getFavorites: async function(){
+      await this.$axios
+        .get(this.$store.state.BASE_URL + "/favoritos?usuario=1")
+        .then((response) => {
+          console.log("categories:", response.data);
+          this.favorites = response.data;
+          console.log("USER:", this.$auth)
+        })
+        .catch((error) => {
+          console.log("categories ERRO!", error);
+        });
+    },
     getCategories: async function () {
       await this.$axios
         .get(this.$store.state.BASE_URL + "/categoria")
@@ -150,7 +163,7 @@ export default {
   },
 
   async created() {
-    await Promise.all([this.getCategories()]);
+    await Promise.all([this.getCategories(), this.getFavorites()]);
     this.getMovie();
   },
 };
