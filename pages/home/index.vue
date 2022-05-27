@@ -84,7 +84,9 @@
                 }
               "
             >
-              <button>Favoritar</button>
+              <button
+              class="btnFav"
+              @click="changeFavorite()">👍</button>
 
               <img
                 v-if="movies[id] !== undefined"
@@ -130,13 +132,18 @@ export default {
     };
   },
   methods: {
+    changeFavorite: function(){
+
+    },
     getFavorites: async function () {
       await this.$axios
-        .get(this.$store.state.BASE_URL + "/favoritos?usuario=1")
+        .get(this.$store.state.BASE_URL + "/favoritos?usuario=" 
+            + this.$auth.$state.user.id)
         .then((response) => {
-          console.log("categories:", response.data);
+          console.log("FAVORITOS:", response.data);
           this.favorites = response.data;
           console.log("USER:", this.$auth);
+          console.log("ID:", this.$auth.$state.user.id);
         })
         .catch((error) => {
           console.log("categories ERRO!", error);
@@ -161,9 +168,11 @@ export default {
             console.log(response.data);
             this.movies.push({
               category: category,
-              movies: response.data,
+              movies: response.data,              
             });
             console.log("this.movies", this.movies);
+
+            
           })
           .catch((error) => {
             console.log(error);
@@ -266,6 +275,13 @@ main {
           img {
             height: 330px;
             /* max-width: 300px; */
+          }
+
+          .btnFav{
+            cursor:pointer;
+            background-color: rgba(0,0,0,0.2);
+            color: white;
+            font-weight: bold;
           }
         }
 
