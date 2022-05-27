@@ -43,17 +43,22 @@
     <section
       class="movies w-screen h-auto flex flex-column align-items-start justify-content-center"
     >
-      <div class="categories"
-       v-for="(movie, id) in movies" :key="id">
+      <div class="categories" v-for="(movie, id) in movies" :key="id">
         <!-- LISTAGEM CATEGORIA AÇÃO -->
-        <h3 v-if="movie.movies.length >= 8" class="ml-3">{{movie.category.nome}}</h3>
+        <h3 v-if="movie.movies.length >= 8" class="ml-3">
+          {{ movie.category.nome }}
+        </h3>
         <div v-if="movie.movies.length >= 8" class="movies-category">
           <section
             v-for="index in noSection"
             :key="index"
             :id="'section' + id + '-' + index"
           >
-            <a :href="'#section' + id + '-' + (index - 1 <= 0 ? noSection : index - 1)">
+            <a
+              :href="
+                '#section' + id + '-' + (index - 1 <= 0 ? noSection : index - 1)
+              "
+            >
               <div class="arrowContainer">&#8592;</div>
             </a>
             <div
@@ -79,7 +84,8 @@
                 }
               "
             >
-              <!-- <button class="fav">Favorito</button> -->
+              <button>Favoritar</button>
+
               <img
                 v-if="movies[id] !== undefined"
                 :src="
@@ -89,7 +95,11 @@
               />
             </div>
 
-            <a :href="'#section' + id + '-' + (index + 1 > noSection ? 1 : index + 1)">
+            <a
+              :href="
+                '#section' + id + '-' + (index + 1 > noSection ? 1 : index + 1)
+              "
+            >
               <div class="arrowContainer">&#8594;</div>
             </a>
           </section>
@@ -116,17 +126,17 @@ export default {
       categories: [],
       noSection: 2,
       noItems: 4,
-      favorites: []
+      favorites: [],
     };
   },
   methods: {
-    getFavorites: async function(){
+    getFavorites: async function () {
       await this.$axios
         .get(this.$store.state.BASE_URL + "/favoritos?usuario=1")
         .then((response) => {
           console.log("categories:", response.data);
           this.favorites = response.data;
-          console.log("USER:", this.$auth)
+          console.log("USER:", this.$auth);
         })
         .catch((error) => {
           console.log("categories ERRO!", error);
